@@ -26,26 +26,43 @@ class _MyWidgetState extends State<PhoneNOScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text(
+              'LogIn With Your Phone Number ',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             TextFormField(
+              keyboardType: TextInputType.number,
               controller: phoneNumberController,
-              decoration:
-                  const InputDecoration(hintText: 'Enter Your Phone No'),
+              decoration: const InputDecoration(hintText: '+923078555817'),
             ),
             const SizedBox(
               height: 50,
             ),
             RoundButton(
                 title: "LogIn",
+                loading: loading,
                 onTap: () {
+                  setState(() {
+                    loading = true;
+                  });
                   auth.verifyPhoneNumber(
                       phoneNumber: phoneNumberController.text.toString(),
                       verificationCompleted: (context) {},
                       verificationFailed: (e) {
                         Utils().toastMessage(message: e.toString());
+                        setState(() {
+                          loading = false;
+                        });
                       },
                       codeSent: (String verificationId, int? token) {
+                        setState(() {
+                          loading = false;
+                        });
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -55,6 +72,9 @@ class _MyWidgetState extends State<PhoneNOScreen> {
                       },
                       codeAutoRetrievalTimeout: (e) {
                         Utils().toastMessage(message: e.toString());
+                        setState(() {
+                          loading = false;
+                        });
                       });
                 })
           ],
