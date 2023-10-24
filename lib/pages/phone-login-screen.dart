@@ -36,7 +36,7 @@ class _MyWidgetState extends State<PhoneNOScreen> {
               height: 20,
             ),
             TextFormField(
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.text,
               controller: phoneNumberController,
               decoration: const InputDecoration(hintText: '+923078555817'),
             ),

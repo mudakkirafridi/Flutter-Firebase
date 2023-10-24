@@ -37,7 +37,7 @@ class _MyWidgetState extends State<CodeScreen> {
               height: 20,
             ),
             TextFormField(
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.phone,
               controller: verifyController,
               decoration: const InputDecoration(hintText: '333666'),
             ),
