@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_firebase/pages/news-feed-screen.dart';
 import 'package:flutter_firebase/pages/sign-up.dart';
 import 'package:flutter_firebase/utilities/utils.dart';
 
@@ -35,6 +36,13 @@ class _MyWidgetState extends State<PostScreen> {
       ),
       body: const Column(
         children: [],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (_) => const NewsFeedScreen()));
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
