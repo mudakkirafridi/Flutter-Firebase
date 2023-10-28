@@ -1,3 +1,5 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_firebase/pages/news-feed-screen.dart';
@@ -13,6 +15,7 @@ class PostScreen extends StatefulWidget {
 
 class _MyWidgetState extends State<PostScreen> {
   final auth = FirebaseAuth.instance;
+  final dbref = FirebaseDatabase.instance.ref("posts");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,8 +37,19 @@ class _MyWidgetState extends State<PostScreen> {
               icon: const Icon(Icons.logout))
         ],
       ),
-      body: const Column(
-        children: [],
+      body: Column(
+        children: [
+          Expanded(
+            child: FirebaseAnimatedList(
+                query: dbref,
+                itemBuilder: (context, snapshot, index, animation) {
+                  return ListTile(
+                    title: Text(snapshot.child('title').value.toString()),
+                    subtitle: Text(snapshot.child('id').value.toString()),
+                  );
+                }),
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
