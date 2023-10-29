@@ -20,7 +20,7 @@ class _MyWidgetState extends State<PostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Post Screen"),
+        title: const Text("Post NewsFeed Screen"),
         centerTitle: true,
         actions: [
           IconButton(
