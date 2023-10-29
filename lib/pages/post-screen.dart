@@ -40,6 +40,27 @@ class _MyWidgetState extends State<PostScreen> {
       body: Column(
         children: [
           Expanded(
+              child: StreamBuilder(
+                  stream: dbref.onValue,
+                  builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+                    if (!snapshot.hasData) {
+                      return const CircularProgressIndicator();
+                    } else {
+                      Map<dynamic, dynamic> map =
+                          snapshot.data!.snapshot.value as dynamic;
+                      List<dynamic> dataList = [];
+                      dataList.clear();
+                      dataList = map.values.toList();
+                      return ListView.builder(
+                          itemCount: snapshot.data!.snapshot.children.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(dataList[index].toString()),
+                            );
+                          });
+                    }
+                  })),
+          Expanded(
             child: FirebaseAnimatedList(
                 query: dbref,
                 itemBuilder: (context, snapshot, index, animation) {
