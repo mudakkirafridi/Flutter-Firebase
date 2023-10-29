@@ -16,6 +16,7 @@ class PostScreen extends StatefulWidget {
 class _MyWidgetState extends State<PostScreen> {
   final auth = FirebaseAuth.instance;
   final dbref = FirebaseDatabase.instance.ref("posts");
+  final searchFilter = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,35 +40,34 @@ class _MyWidgetState extends State<PostScreen> {
       ),
       body: Column(
         children: [
-          Expanded(
-              child: StreamBuilder(
-                  stream: dbref.onValue,
-                  builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
-                    if (!snapshot.hasData) {
-                      return const CircularProgressIndicator();
-                    } else {
-                      Map<dynamic, dynamic> map =
-                          snapshot.data!.snapshot.value as dynamic;
-                      List<dynamic> dataList = [];
-                      dataList.clear();
-                      dataList = map.values.toList();
-                      return ListView.builder(
-                          itemCount: snapshot.data!.snapshot.children.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(dataList[index].toString()),
-                            );
-                          });
-                    }
-                  })),
+          TextFormField(
+            controller: searchFilter,
+            decoration: const InputDecoration(
+                hintText: 'Search', border: OutlineInputBorder()),
+            onChanged: (String value) {
+              setState(() {});
+            },
+          ),
           Expanded(
             child: FirebaseAnimatedList(
                 query: dbref,
                 itemBuilder: (context, snapshot, index, animation) {
-                  return ListTile(
-                    title: Text(snapshot.child('title').value.toString()),
-                    subtitle: Text(snapshot.child('id').value.toString()),
-                  );
+                  final title = snapshot.child('title').value.toString();
+                  if (searchFilter.text.isEmpty) {
+                    return ListTile(
+                      title: Text(snapshot.child('title').value.toString()),
+                      subtitle: Text(snapshot.child('id').value.toString()),
+                    );
+                  } else if (title
+                      .toLowerCase()
+                      .contains(searchFilter.text.toLowerCase())) {
+                    return ListTile(
+                      title: Text(snapshot.child('title').value.toString()),
+                      subtitle: Text(snapshot.child('id').value.toString()),
+                    );
+                  } else {
+                    return Container();
+                  }
                 }),
           )
         ],
