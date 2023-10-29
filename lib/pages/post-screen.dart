@@ -77,7 +77,7 @@ class _MyWidgetState extends State<PostScreen> {
           Navigator.push(context,
               MaterialPageRoute(builder: (_) => const NewsFeedScreen()));
         },
-        child: const Icon(Icons.post_add),
+        child: const Icon(Icons.post_add_outlined),
       ),
     );
   }
