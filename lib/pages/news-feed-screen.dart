@@ -44,11 +44,11 @@ class _MyWidgetState extends State<NewsFeedScreen> {
                   setState(() {
                     loading = true;
                   });
-                  dbRefrence
-                      .child(DateTime.now().millisecondsSinceEpoch.toString())
-                      .set({
+
+                  String id = DateTime.now().microsecondsSinceEpoch.toString();
+                  dbRefrence.child(id).set({
                     "title": postController.text.toString(),
-                    "id": DateTime.now().millisecondsSinceEpoch.toString()
+                    "id": id
                   }).then((value) {
                     setState(() {
                       loading = false;

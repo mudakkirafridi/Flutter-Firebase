@@ -17,6 +17,7 @@ class _MyWidgetState extends State<PostScreen> {
   final auth = FirebaseAuth.instance;
   final dbref = FirebaseDatabase.instance.ref("posts");
   final searchFilter = TextEditingController();
+  final dialogController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,6 +58,35 @@ class _MyWidgetState extends State<PostScreen> {
                     return ListTile(
                       title: Text(snapshot.child('title').value.toString()),
                       subtitle: Text(snapshot.child('id').value.toString()),
+                      trailing: PopupMenuButton(
+                        icon: const Icon(Icons.more_vert),
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                              value: 1,
+                              child: ListTile(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  showMyDialog(title,
+                                      snapshot.child('id').value.toString());
+                                },
+                                leading: const Icon(Icons.edit),
+                                title: const Text('Edit'),
+                              )),
+                          PopupMenuItem(
+                              value: 2,
+                              child: ListTile(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  dbref
+                                      .child(
+                                          snapshot.child('id').value.toString())
+                                      .remove();
+                                },
+                                leading: const Icon(Icons.delete),
+                                title: const Text('Delete'),
+                              )),
+                        ],
+                      ),
                     );
                   } else if (title
                       .toLowerCase()
@@ -80,5 +110,42 @@ class _MyWidgetState extends State<PostScreen> {
         child: const Icon(Icons.post_add_outlined),
       ),
     );
+  }
+
+  Future<void> showMyDialog(String title, String id) async {
+    dialogController.text = title;
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('update'),
+            content: Container(
+              child: TextFormField(
+                controller: dialogController,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(), hintText: "Edit Here"),
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cancel')),
+              TextButton(
+                  onPressed: () {
+                    dbref.child(id).update({
+                      'title': dialogController.text.toLowerCase()
+                    }).then((value) {
+                      Utils().toastMessage(message: 'Successfully Updated');
+                      Navigator.pop(context);
+                    }).onError((error, stackTrace) {
+                      Utils().toastMessage(message: error.toString());
+                    });
+                  },
+                  child: const Text('Update'))
+            ],
+          );
+        });
   }
 }
