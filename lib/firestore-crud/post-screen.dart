@@ -15,6 +15,7 @@ class FireStoreScreen extends StatefulWidget {
 class _MyWidgetState extends State<FireStoreScreen> {
   final auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance.collection('users').snapshots();
+  CollectionReference rf = FirebaseFirestore.instance.collection('users');
   final searchFilter = TextEditingController();
   final dialogController = TextEditingController();
   @override
@@ -56,6 +57,28 @@ class _MyWidgetState extends State<FireStoreScreen> {
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {
                           return ListTile(
+                            onTap: () {
+                              // ***update code
+                              // rf
+                              //     .doc(snapshot.data!.docs[index]['id']
+                              //         .toString())
+                              //     .update({'title': 'Mudakir Afridi'}).then(
+                              //         (value) {
+                              //   Utils().toastMessage(
+                              //       message: 'Successful Updated');
+                              // }).onError((error, stackTrace) {
+                              //   Utils().toastMessage(message: error.toString());
+                              // });
+
+                              // **** delete code
+                              rf
+                                  .doc(snapshot.data!.docs[index]['id']
+                                      .toString())
+                                  .delete()
+                                  .then((value) {
+                                Utils().toastMessage(message: 'deleted..');
+                              });
+                            },
                             title: Text(
                                 snapshot.data!.docs[index]['title'].toString()),
                           );
