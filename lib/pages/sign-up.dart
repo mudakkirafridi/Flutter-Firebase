@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase/pages/forgot-screen.dart';
 import 'package:flutter_firebase/pages/login-screen.dart';
 import 'package:flutter_firebase/pages/phone-login-screen.dart';
 import 'package:flutter_firebase/pages/post-screen.dart';
@@ -121,6 +122,18 @@ class _MyWidgetState extends State<SignUpScreen> {
                       signUp();
                     }
                   },
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ForgotPasswordScreen()));
+                      },
+                      child: const Text('Forgot Password?')),
                 ),
                 const SizedBox(
                   height: 15,
